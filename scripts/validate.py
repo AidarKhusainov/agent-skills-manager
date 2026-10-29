@@ -78,18 +78,18 @@ def main() -> None:
     check(entry.get("category") == ui["category"], "Marketplace category mismatch")
 
     skill_dir = ROOT / "skills"
-    check(sorted(p.name for p in skill_dir.iterdir()) == ["manage"], "Only manage-skills may be shipped")
+    check(sorted(p.name for p in skill_dir.iterdir()) == ["manage"], "Only manage may be shipped")
     check(sorted(str(p.relative_to(skill_dir)) for p in skill_dir.rglob("SKILL.md")) == ["manage/SKILL.md"], "Unexpected additional skill")
     check(not (ROOT / "sources.json").exists(), "User collection state cannot be bundled")
 
-    skill = (skill_dir / "manage-skills/SKILL.md").read_text(encoding="utf-8")
+    skill = (skill_dir / "manage/SKILL.md").read_text(encoding="utf-8")
     frontmatter = re.match(r"\A---\r?\n(.*?)\r?\n---\r?\n", skill, re.DOTALL)
     check(frontmatter is not None, "SKILL.md needs YAML frontmatter")
     meta = yaml.safe_load(frontmatter.group(1))
     check(isinstance(meta, dict) and meta.get("name") == "manage", "Invalid skill name")
     check(isinstance(meta.get("description"), str) and meta["description"].strip(), "Description required")
     check('managed_by: "skills-manager-public"' in skill, "Legacy collection marker changed")
-    openai = yaml.safe_load((skill_dir / "manage-skills/agents/openai.yaml").read_text(encoding="utf-8"))
+    openai = yaml.safe_load((skill_dir / "manage/agents/openai.yaml").read_text(encoding="utf-8"))
     check(openai["interface"]["display_name"] == DISPLAY_NAME, "Skill display name mismatch")
     check(bool(openai["interface"]["default_prompt"]), "Skill default prompt missing")
     ElementTree.parse(ROOT / "assets/icon.svg")
