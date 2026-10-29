@@ -25,7 +25,7 @@ def read_json(path: str) -> dict:
 
 def validate_path(value: str, expected: str) -> None:
     check(isinstance(value, str) and value == "./" + expected, f"Unexpected relative path: {value}")
-    check((ROOT / expected).is_file(), f"Missing referenced file: {expected}")
+    check((ROOT / expected).exists(), f"Missing referenced path: {expected}")
 
 
 def main() -> None:
@@ -63,7 +63,7 @@ def main() -> None:
     check(not (ROOT / "sources.json").exists(), "User collection state cannot be bundled")
 
     skill = (skill_dir / "manage-skills/SKILL.md").read_text(encoding="utf-8")
-    frontmatter = re.match(r"\\A---\\r?\\n(.*?)\\r?\\n---\\r?\\n", skill, re.DOTALL)
+    frontmatter = re.match(r"\A---\r?\n(.*?)\r?\n---\r?\n", skill, re.DOTALL)
     check(frontmatter is not None, "SKILL.md needs YAML frontmatter")
     meta = yaml.safe_load(frontmatter.group(1))
     check(isinstance(meta, dict) and meta.get("name") == "manage-skills", "Invalid skill name")
