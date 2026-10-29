@@ -6,7 +6,7 @@ Discovery answers "which Agent Skills are in this GitHub source?" It **does not 
 
 Treat a skill as a **candidate** only when an actual regular Git blob named exactly `SKILL.md` is present at the resolved revision. The directory containing that file is the candidate's source path. Do not infer skills from README entries, directory names, search snippets, or previous conversations.
 
-The normal cost is **one repository metadata read (if default branch is needed), one commit resolution, one recursive tree read, and one small `SKILL.md` read per candidate**. No whole-repository download or scan of companion files.
+Resolve the requested revision, inspect its Git tree and read only candidate `SKILL.md` metadata. Do not download the repository or scan companion files for discovery.
 
 ## Accepted inputs and normalization
 
