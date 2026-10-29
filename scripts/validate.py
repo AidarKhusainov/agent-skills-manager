@@ -10,7 +10,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_NAME = "agent-skills-manager"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 DISPLAY_NAME = "Agent Skills Manager"
 
 

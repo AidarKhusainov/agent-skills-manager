@@ -40,6 +40,16 @@ When upstream files change, refresh the Git-backed marketplace snapshot with `co
 
 For the underlying local marketplace format, see [OpenAI's plugin packaging documentation](https://developers.openai.com/plugins/build/plugins).
 
+## Starter prompts
+
+The ChatGPT plugin listing provides three built-in examples, configured in the portable and compatibility manifests:
+
+1. **Discover skills:** Ask for a GitHub repository URL and list its Agent Skills without installing them.
+2. **List installed skills:** Inspect the user's own private collection and show the installed skills with their source repositories.
+3. **Check for updates:** Compare installed skills with upstream changes and report differences without applying changes.
+
+These are starter prompts, not automatic actions. Plugin Creator access is still required for persistent installation, updates, or removal. The ChatGPT host determines how prompts appear in the listing.
+
 ## Get started
 
 In a ChatGPT environment with native plugin support, install or enable **Agent Skills Manager** from your available plugins, or import the package using a supported plugin import workflow. For source imports, preserve both `plugin.json` and the hidden `.codex-plugin/` directory.
