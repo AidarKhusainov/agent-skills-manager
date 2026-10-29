@@ -96,13 +96,13 @@ The manager now explicitly routes discovery, status and mutation, without requir
 - [x] Read-only real-repository discovery and namespace/privacy boundary reviewed.
 - [x] Release version is `0.2.3` in `VERSION` and both manifests.
 - [x] Changelog, migration notes and E2E limitations documented.
-- [ ] Final HEAD of **this PR** passes CI (previous HEAD `ae8b3ef` passed); inspect checks again after edits.
+- [x] PR #6 CI passed 26 regression tests and package validation after the documentation cleanup ([workflow run](https://github.com/AidarKhusainov/agent-skills-manager/actions/runs/40877031448)); recheck the final branch head after subsequent edits.
 - [x] Review the combined PR against `master` for changed paths, stacked integration and ownership boundaries; PR #1–#5 overlap by design.
-- [ ] Execute separately approved isolated write-E2E (or formally accept/document the untested risk).
+- [ ] Isolated write-E2E is **NOT RUN**: no verified disposable destination/native runtime. Its absence is explicitly documented, not represented as a passing check.
 - [ ] Verify the target host's packaging, installation/enabling and activation independently.
 - [ ] Obtain release approval; **only then** merge, tag/publish or update Plugin Creator if explicitly authorized.
 
-**Release decision:** hold publication until review and applicable verification gates are satisfied. This PR deliberately neither publishes nor updates private user plugins.
+**Release decision:** source review/merge is separate from publication. Do not publish until the unexecuted write-E2E risk has been explicitly considered and release authorization has been given. No private user plugin is created or modified as part of this PR.
 
 ## Final independent readiness audit (2026-10-29)
 
@@ -111,7 +111,7 @@ The manager now explicitly routes discovery, status and mutation, without requir
 | Check | Result | Evidence / boundary |
 | --- | --- | --- |
 | PR #6 combined diff / stacked PR integration | PASS | 20 paths against `master`; no duplicate file paths. The architecture/discovery files from #1/#2 match the release branch byte-for-byte. #1–#5 remain open and overlap. |
-| Candidate source/package CI | PASS before final report edit; recheck latest HEAD | [Validate plugin source](https://github.com/AidarKhusainov/agent-skills-manager/actions) ran 26 unit tests and package validation after the workflow corrections. |
+| Candidate source/package CI | PASS at reviewed head; recheck final HEAD | [PR #6 workflow run](https://github.com/AidarKhusainov/agent-skills-manager/actions/runs/40877031448): 26 tests, Python syntax check and package validation all passed. |
 | Real GitHub discovery | PASS | `AidarKhusainov/skills` at `56cb469463acda79921bf420eccf503881240d0b`; 35 complete tree entries, 4 verified metadata candidates, no writes or Creator calls. |
 | Unknown source / missing-ref API behavior | PASS at read-tool boundary only | A deliberately invalid GitHub ref returned HTTP 422; agent error wording was not executed as a runtime test. |
 | RU intent routing and readable status | SPEC REVIEW ONLY | Modes checked against four Russian phrases; no autonomous agent runtime invoked. |
