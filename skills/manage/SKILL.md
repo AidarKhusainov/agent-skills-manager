@@ -31,13 +31,13 @@ STATUS never changes anything. Read only the **host-visible native skills** or *
 
 For a managed collection, reconcile real `skills/*/SKILL.md` against `sources.json`: tracked repositories are separate from installed skills. Show **Skill | Source (repo/path) | Pinned SHA | Update status**. Verify updates by comparing the pinned vs current *selected skill subtree and declared dependencies*, not GitHub HEAD alone. Detect local adaptations.
 
-Use `Up to date` / `Update available` only after a verified scoped comparison; otherwise report `Not checked` or `Unavailable` with a short reason. Report `Locally modified` separately because local changes can coexist with any upstream update state. Do not count this public `manage` skill as an imported one. Reconciliation and update-comparison details: [references/operations.md](references/operations.md).
+Use `Up to date` / `Update available` only after a verified scoped comparison; otherwise report `Not checked` or `Unavailable` with a short reason. An installed native skill with unknown source/revision is `Untracked` (update status `Unavailable`), not `Up to date`. A pinned skill skipped by a native updater is `Not checked`, not evidence of freshness. Report `Locally modified` separately because local changes can coexist with any upstream update state. Do not count this public `manage` skill as an imported one. Reconciliation and update-comparison details: [references/operations.md](references/operations.md).
 
 ## Private collection data and discovery
 
 Choose a backend by **verified permissions and actual environment**, not by the presence of a helper skill:
 
-- **Codex, authorized persistent filesystem:** prefer native skill installation and the relevant user/project directory; verify files and visibility. Do not assume sandbox files persist.
+- **Codex, authorized persistent filesystem:** prefer native skill installation and the relevant user/project directory; verify files and visibility. Where available, a verified `gh skill install` / `gh skill list` workflow can preserve and read GitHub source metadata; inspect the actual result. Codex `$skill-installer` copies skill files but does not by itself guarantee durable source provenance. Before approval, disclose when the native path will leave a usable but **untracked** skill without reliable update status. Never fabricate a source SHA or treat a skipped pinned update as current. Do not assume sandbox files persist.
 - **ChatGPT native Skills:** use an actual authorized native write tool, if provided. If only the Skills UI supports installation, present the reviewed source/upload and user steps; do **not** pretend to have installed or activated anything.
 - **Existing Plugin Creator private collection:** use it only after verifying the user's ownership, `USER` / `PRIVATE` scope, real files, current release and source ledger. **Reuse it.** A new private collection is an optional fallback **only when specifically selected in an approved plan**; never create an empty collection automatically.
 
