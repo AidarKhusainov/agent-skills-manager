@@ -36,7 +36,7 @@ The release PR targets `master` and therefore includes this entire as-yet-unmerg
 **Ref:** `master` at full commit `56cb469463acda79921bf420eccf503881240d0b`  
 **Tree:** `d5a0ed2f1a86b07008beeccddc29679770dde1f4`, `truncated: false`
 
-Read repository metadata, resolve the commit, obtain the recursive tree and read the leading `SKILL.md` metadata for each of the four candidates. This minimal trace is **7 GitHub read actions, 0 write actions**, without full-repository download or Plugin Creator. Each candidate has valid nonempty `name` and `description`; no name collision was seen.
+Read repository metadata, resolve the commit, obtain the recursive tree and read the leading `SKILL.md` metadata for each of the four candidates. This was a read-only repository inspection without a full-repository download, Plugin Creator use, or any collection mutation. Each candidate has valid nonempty `name` and `description`; no name collision was seen.
 
 | Candidate | Skill directory | Metadata |
 | --- | --- | --- |
@@ -49,7 +49,7 @@ A missing-directory path can be distinguished from an empty valid subtree using 
 
 ## Automated validation
 
-The previous stacked PR #5 passed GitHub Actions [Validate plugin source](https://github.com/AidarKhusainov/agent-skills-manager/actions/runs/40860007915) on 2026-10-29: Python syntax check, 23 isolated unit tests and actual-package validation. **That result predates these release-branch edits.** The release PR must have an independent passing CI run before review completion.
+PR #6 passed [Validate plugin source](https://github.com/AidarKhusainov/agent-skills-manager/actions/runs/40870894351) at `ae8b3ef0b1d7f81d1db7d0ef4caee3fe4271ab57` on 2026-10-29: Python syntax check, regression tests and actual-package validation. Recheck CI against the final commit after release-documentation edits.
 
 Run locally or in CI:
 
@@ -60,11 +60,11 @@ python -m unittest discover -s tests -v
 python scripts/validate.py
 ```
 
-The release candidate adds three tests for `VERSION` mismatch, omission and malformed content, extending the fixture suite from 23 to **26 test definitions**. Test definitions are not counted as passes until CI reports them.
+The release candidate adds tests for `VERSION` mismatch, omission and malformed content, extending the fixture suite from 23 to **26 test definitions**. The recorded PR #6 CI run passed them; the final branch head must also pass.
 
-## v0.2.2 UX comparison
+## Behavioral changes since v0.2.2
 
-The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated words**; the current release-branch version after the Codex provenance correction is **1,181** (~**30% fewer**). Earlier integration measurements (1,070 words) predate that correction. The shorter instruction explicitly routes discovery, status and mutation without requiring Plugin Creator for discovery or verified native operations.
+The manager now explicitly routes discovery, status and mutation, without requiring Plugin Creator for discovery or verified native operations.
 
 | Dimension | v0.2.2 instructions | v0.2.3 candidate instructions |
 | --- | --- | --- |
@@ -74,13 +74,11 @@ The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated word
 | Unchanged repeated operation | Described generally, no unified no-op gate | Explicit no-op and no unnecessary release |
 | Status dimensions | Upstream/local status already distinguished | Distinction preserved and made explicit |
 
-**Measured runtime impact:** not established for v0.2.2. The 7-read discovery trace is a v0.2.3 pathway observation, **not** a matched A/B agent benchmark. Counts of actual redundant questions, tool invocations, repeated reads and preparation steps across versions require paired conversations in the same environment.
-
 ## E2E execution and blockers
 
 - **Read-only GitHub discovery:** PASS for the four real candidates above.
 - **Plugin Creator missing / private storage unavailable:** instruction/fallback review PASS; actual agent/runtime behavior **NOT RUN**. Expected outcome is `Unavailable`, no fabricated empty collection and no replacement creation.
-- **Install one/all, repeat, update, remove, concurrent change, partial failure and rejected plan:** **NOT RUN**. The user requires a separate explicit approval for concrete write operations. No disposable USER/PRIVATE test collection or approved write scope was provided, and no private collection was modified.
+- **Install one/all, repeat, update, remove, concurrent change, partial failure and rejected plan:** **NOT RUN**. No verified disposable collection or persistent native installer was available. No auxiliary test plugin was created and no user collection was modified.
 - **Native Codex filesystem installation and ChatGPT Skills UI upload/activation:** **NOT RUN** in this session. Read-only access to GitHub does not prove host write, persistence, installation or activation capabilities.
 - For the full manual matrix, see [regression test plan](regression-test-plan.md); do not interpret its scenario definitions as executed E2E results.
 
@@ -98,10 +96,9 @@ The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated word
 - [x] Read-only real-repository discovery and namespace/privacy boundary reviewed.
 - [x] Release version is `0.2.3` in `VERSION` and both manifests.
 - [x] Changelog, migration notes and E2E limitations documented.
-- [ ] The **release PR's own** CI passes; inspect the final merge commit and all checks.
-- [ ] Review the combined PR against `master` for changes, secrets, ownership and no duplicate integration.
+- [ ] Final HEAD of **this PR** passes CI (previous HEAD `ae8b3ef` passed); inspect checks again after edits.
+- [x] Review the combined PR against `master` for changed paths, stacked integration and ownership boundaries; PR #1–#5 overlap by design.
 - [ ] Execute separately approved isolated write-E2E (or formally accept/document the untested risk).
-- [ ] Complete runtime UX A/B evaluation where both environments and permissions are available.
 - [ ] Verify the target host's packaging, installation/enabling and activation independently.
 - [ ] Obtain release approval; **only then** merge, tag/publish or update Plugin Creator if explicitly authorized.
 
@@ -109,7 +106,7 @@ The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated word
 
 ## Final independent readiness audit (2026-10-29)
 
-**Decision: NO-GO for publication until isolated mutation E2E has been executed.** This is an evidence gate, not evidence of data loss or an observed destructive failure.
+**Decision: source changes can be reviewed for merge, but publication remains on hold pending an explicit release decision and evaluation of unexecuted isolated mutation E2E.** The missing E2E is a known verification limitation, not evidence of an observed destructive failure.
 
 | Check | Result | Evidence / boundary |
 | --- | --- | --- |
@@ -121,8 +118,7 @@ The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated word
 | Native Codex provenance | FIXED IN INSTRUCTIONS; E2E BLOCKED | Explicitly distinguish tracked vs untracked skills and pinned update skips; see `skills/manage/SKILL.md` and `skills/manage/references/operations.md`. No executable `gh` or `codex` was available in this test host. |
 | Install / reinstall / update / remove | BLOCKED | No authorized real native installer/runtime and no disposable private collection in this session. Static validation and a fabricated mock are not a substitute. |
 | Unauthorized write, concurrency and failure recovery | BLOCKED for agent runtime | Reviewed as conservative specification; permission-denied and write-timeout behavior not live-tested. |
-| v0.2.2 vs v0.2.3 tool/question/time benchmark | BLOCKED | No paired equivalent runtimes; words are a static comparison only. |
 
 New manual regression rows test native Codex provenance and pinned-update status. They are **not** counted as passing E2E. All mutations of user collections, production plugins, merges, tags and publication were excluded.
 
-**Release gate:** test a deliberately disposable native Codex directory with a verified persistent installer or an expressly approved isolated USER/PRIVATE collection; capture before/after files, source pin, no-op release behavior, permission failure, read-back and local adaptation handling. Recheck CI at the final HEAD and obtain a separate publication decision.
+**Remaining release gate:** when an isolated persistent native Codex directory or expressly authorized disposable USER/PRIVATE collection becomes available, verify install, repeat/no-op, update, removal, provenance, file preservation and error recovery against real state. Record any unavailable scenarios as `NOT RUN`; do not block source review on invented E2E success. Recheck CI at the final HEAD and obtain a separate publication decision.
