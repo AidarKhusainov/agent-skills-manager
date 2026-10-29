@@ -1,0 +1,15 @@
+# Local operating-system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Local credentials and temporary exports
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.zip
+*.tar.gz

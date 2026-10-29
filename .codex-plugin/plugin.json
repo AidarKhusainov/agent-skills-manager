@@ -1,0 +1,33 @@
+{
+  "interface": {
+    "displayName": "Skills Manager",
+    "shortDescription": "Manage your own Agent Skills",
+    "longDescription": "Discover Agent Skills in GitHub repositories you choose. Review candidates and manage selected native skills in a separate private plugin that belongs to you. Installation, removal and updates require your explicit approval and access to Plugin Creator. The public manager includes no third-party skills or preset repositories; read-only repository discovery works without Plugin Creator.",
+    "developerName": "Aidar",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Discover GitHub Agent Skills",
+      "Manage a private skill collection"
+    ],
+    "defaultPrompt": "Find Agent Skills in a GitHub repository I choose and help me select what to install.",
+    "logo": "./assets/icon.svg",
+    "composerIcon": "./assets/icon.svg"
+  },
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/manage-skills/SKILL.md"
+    }
+  },
+  "name": "skills-manager-public",
+  "version": "0.1.1",
+  "description": "Discover user-selected GitHub Agent Skills and manage each user\u2019s separate private collection with review and approval.",
+  "author": {
+    "name": "Aidar"
+  },
+  "keywords": [
+    "agent-skills",
+    "github",
+    "skill-management"
+  ],
+  "skills": "./skills"
+}
