@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "agent-skills-manager",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Discover user-selected GitHub Agent Skills and manage each user’s separate private collection with review and approval.",
   "author": {
     "name": "Aidar"
@@ -25,7 +25,7 @@
         ],
         "defaultPrompt": [
           "Find Agent Skills in a GitHub repository I'll provide. Ask for its URL and show the available skills.",
-          "List the Agent Skills installed in my private collection, including their source repositories.",
+          "Show my Agent Skills collection: installed skills, GitHub sources, pinned revisions, and available updates.",
           "Check my installed Agent Skills for updates and show changes. Don't apply any updates yet."
         ],
         "logo": "./assets/icon.svg",

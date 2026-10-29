@@ -50,6 +50,16 @@ The ChatGPT plugin listing provides three built-in examples, configured in the p
 
 These are starter prompts, not automatic actions. Plugin Creator access is still required for persistent installation, updates, or removal. The ChatGPT host determines how prompts appear in the listing.
 
+## Collection status report (read-only)
+
+Ask **"Покажи состояние моей коллекции"** or **"Show my collection status"**. The manager checks only your verified private collection and, where source access permits, returns a compact table:
+
+| Skill | Source (repo/path) | Pinned SHA | Update status |
+| --- | --- | --- | --- |
+| `example` | `owner/repo:skills/example` | `a1b2c3d4…` | `Not checked` |
+
+The row above is an **illustrative example**, not a live result. Real statuses are `Up to date`, `Update available`, `Locally modified`, `Not checked`, or `Unavailable`, depending on what can be verified. Tracked repositories without installed skills are listed separately. The report does not write anything and cannot show account-wide skills from unrelated plugins. Plugin Creator read access is necessary to inspect your private managed collection.
+
 ## Get started
 
 In a ChatGPT environment with native plugin support, install or enable **Agent Skills Manager** from your available plugins, or import the package using a supported plugin import workflow. For source imports, preserve both `plugin.json` and the hidden `.codex-plugin/` directory.

@@ -10,7 +10,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_NAME = "agent-skills-manager"
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 DISPLAY_NAME = "Agent Skills Manager"
 
 
@@ -89,6 +89,13 @@ def main() -> None:
     check(isinstance(meta, dict) and meta.get("name") == "manage", "Invalid skill name")
     check(isinstance(meta.get("description"), str) and meta["description"].strip(), "Description required")
     check('managed_by: "skills-manager-public"' in skill, "Legacy collection marker changed")
+    check("## Collection status (read-only)" in skill, "Collection status instructions missing")
+    check("## Private collection data and discovery" in skill, "Private collection discovery missing")
+    check("Not checked" in skill and "Unavailable" in skill, "Unknown status handling missing")
+    prompts = ui["defaultPrompt"]
+    check(isinstance(prompts, list) and len(prompts) == 3, "Expected three onboarding prompts")
+    check(all(isinstance(p, str) and 0 < len(p) <= 128 for p in prompts), "Invalid onboarding prompt lengths")
+    check("collection" in prompts[1].lower(), "Collection status onboarding missing")
     openai = yaml.safe_load((skill_dir / "manage/agents/openai.yaml").read_text(encoding="utf-8"))
     check(openai["interface"]["display_name"] == DISPLAY_NAME, "Skill display name mismatch")
     check(bool(openai["interface"]["default_prompt"]), "Skill default prompt missing")

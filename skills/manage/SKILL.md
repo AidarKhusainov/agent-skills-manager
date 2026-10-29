@@ -17,11 +17,24 @@ Examples of natural requests:
 - **"Добавь репозиторий" / "Track this repo"**: Browse its skills and explain that tracking a source is distinct from installing any skill. If an existing personal collection is available, propose adding a source record there after approval. For a first-time user with no private collection, a repository can be browsed without storage; establish persistent tracking when the user approves their first selected skill. Do not create an empty placeholder or imply that chat history is persistent plugin state.
 - **"Установи skill" / "Install this skill"**: Resolve exact source/path/ref and dependencies, show an import plan, request explicit approval, then use Plugin Creator to create or update **only the user's private collection**. Never publish a change to this manager for an individual's selection.
 - **"Какие skills установлены?" / "List my skills"**: Discover and verify the user's managed private collection. List `skills/*/SKILL.md` plus the selected source details; do not count `manage` from this public plugin. If there is no private collection, state this and do not assume another owned plugin is managed by this one.
+- **"Покажи состояние моей коллекции" / "Show my collection status"**: Inspect only the verified private collection and report installed skills, sources, pinned SHAs and honestly verified update states in a compact table. This is read-only; see **Collection status (read-only)** below.
 - **"Удали skill" / "Remove this skill"**: Check dependencies and exact paths, show the impact, request approval, delete only those files/records in the private collection and verify.
 - **"Есть обновления?" / "Check updates"**: Compare pinned and current upstream content *within each selected skill subtree* and declared dependencies, not merely repository HEAD. Report verified changes without modifying anything.
 - **"Обнови skill" / "Update this skill"**: Present changed files, dependency/adaptation effects and risks, request approval, apply only accepted changes to the private collection, and verify.
 
 Use the user's provided names/paths without redundant questions. Ask only the next essential question. A request to inspect a repository is not permission to install. A request to install is not final authorization: show the concrete file/repository/version scope and obtain approval before a write. A confirmation applies only to the reviewed change.
+
+## Collection status (read-only)
+
+For **"Покажи состояние моей коллекции" / "Show my collection status"**, produce a concise read-only status report:
+
+1. Locate the user's **verified, owned private collection**, using the discovery rules below. If Plugin Creator or private collection read access is unavailable, explain the limitation; never treat missing access as an empty collection. If none is found, say no **manager-managed** collection was found, not that ChatGPT has no installed native skills. If multiple verified collections exist, ask which one to inspect.
+2. Read the selected private plugin's current `sources.json` and actual `skills/*/SKILL.md` inventory. Verify `managed_by: "skills-manager-public"`. Distinguish tracked `repositories` from installed `skills`. Reconcile missing source records and missing files explicitly. Do not claim this inventory covers skills installed from unrelated plugins.
+3. For each installed skill, show the name, source `repository` and `path`, pinned full `commit_sha` (abbreviate only in the table), and update status. When GitHub read tools are available, resolve the tracked `ref` and compare file paths **and contents** in the selected upstream subtree at the pinned and current commits, including declared dependencies. Repository HEAD changes alone do not indicate a skill update. Compare effective local files against the pinned upstream snapshot to identify user adaptations.
+4. Use **Up to date** only after a successful scoped comparison with no upstream difference; use **Update available** only when a scoped difference is verified. Flag **Locally modified** separately and note any independently verified upstream change. Use **Not checked** when no comparison was attempted and **Unavailable** when an upstream source, ref or needed files cannot be verified; explain why. Never invent version, SHA, freshness, or update states.
+5. Render a compact table **Skill | Source (repo/path) | Pinned SHA | Update status**. Follow with tracked repositories without installed skills, any unresolved source records or adaptations, and a count of checked / unchecked entries. If empty, say this private collection has no installed skills. Suggest a next action, but make no changes.
+
+This status request **never** authorizes creating, updating, removing, or persisting anything, even when write tools are accessible. Changes still require an exact plan and separate explicit approval. Never store any user's collection data in this shared manager.
 
 ## Private collection data and discovery
 
