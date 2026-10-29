@@ -120,15 +120,15 @@ def validate(root: Path = ROOT) -> None:
         require(isinstance(manifest.get("keywords"), list), f"{name}: keywords must be a list")
     version = primary.get("version")
     expected_version = (root / "VERSION").read_text(encoding="utf-8").strip()
-    require(re.fullmatch(r"(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?", expected_version) is not None,
+    require(re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?", expected_version) is not None,
             "VERSION: invalid semantic version")
     require(isinstance(version, str) and re.fullmatch(r"0|[1-9]\d*", version.split(".")[0]) is not None
             and re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?", version) is not None,
             "Invalid semantic version")
-    require(version == expected_version,
-            f"Manifest version {version!r} does not match VERSION {expected_version!r}")
     for field in ("name", "version", "description", "author", "keywords"):
         require(primary.get(field) == compatible.get(field), f"Manifest mismatch: {field}")
+    require(version == expected_version,
+            f"Manifest version {version!r} does not match VERSION {expected_version!r}")
     package_path(root, compatible.get("skills"), "skills")
     openai_primary = primary.get("extensions", {}).get("com.openai", {})
     openai_compat = compatible.get("extensions", {}).get("com.openai", {})
