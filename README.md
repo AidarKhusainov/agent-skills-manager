@@ -13,6 +13,31 @@ The manager itself contains only the `manage-skills` skill. It has no preset rep
 - Pin imports to full Git commit SHAs and compare updates within the selected skill's file subtree rather than repository HEAD alone.
 - Preserve unrelated skills and user adaptations unless you approve their modification.
 
+## Install from GitHub without a payment card
+
+This repository publishes a **Git-backed local plugin marketplace** at [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). It can be added to supported Codex and ChatGPT desktop environments without submitting the plugin to the universal public directory or verifying an OpenAI API billing account.
+
+1. Install **Codex CLI** and sign in with your ChatGPT account. Git access to this public repository is required.
+2. In your terminal, add the repository as a marketplace source:
+
+   ```bash
+   codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref main
+   ```
+
+3. Check that Codex has registered the marketplace:
+
+   ```bash
+   codex plugin marketplace list
+   ```
+
+4. Restart the **ChatGPT desktop app**, open the **Plugins Directory**, select **Agent Skills Manager** as the marketplace source, and install the **Agent Skills Manager** plugin. You may need to start a new chat for the skill to become active.
+
+When upstream files change, refresh the Git-backed marketplace snapshot with `codex plugin marketplace upgrade agent-skills-manager`, then reinstall or refresh the plugin in the desktop interface if necessary.
+
+**Important:** `codex plugin marketplace add` registers a *marketplace source*; it does not itself install or activate the plugin. Git-backed sources are for supported **local** clients, not the public `chatgpt.com/plugins` directory. Installing the manager does not grant the separate **Plugin Creator** permissions required to write to your private skill collection. Repository discovery still works without Plugin Creator.
+
+For the underlying local marketplace format, see [OpenAI's plugin packaging documentation](https://developers.openai.com/plugins/build/plugins).
+
 ## Get started
 
 In a ChatGPT environment with native plugin support, install or enable **Agent Skills Manager** from your available plugins, or import the package using a supported plugin import workflow. For source imports, preserve both `plugin.json` and the hidden `.codex-plugin/` directory.

@@ -43,6 +43,16 @@ Negative cases:
 - Kept the existing `manage-skills` workflow, GitHub discovery, explicit approval, pinned SHA tracking and subtree-based update checks unchanged.
 - Limits: writing requires separately authorized Plugin Creator; no background updates; third-party skill safety and licensing require review; public directory approval is a separate process.
 
+## Git-backed distribution (outside the public directory)
+
+This repo also serves a local marketplace from `.agents/plugins/marketplace.json`. Consumers with a supported Codex CLI / ChatGPT desktop setup can register it using:
+
+```bash
+codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref main
+```
+
+The marketplace entry points to this repo's plugin root on `main` and exposes only `skills-manager-public`. The marketplace is not submitted to the universal OpenAI Plugin Directory. Billing/organization verification for public directory submission is a separate process. Installing from this source does **not** install Plugin Creator or grant write access to private collections.
+
 ## Before submission
 
 Confirm OpenAI Platform developer verification, organization submission permission, required support and policy URLs, metadata, geographical availability, and skills-only eligibility. Review the five positive and three negative cases against actual current host behavior. Submit the ZIP under **Skills only** through the portal only after a separate approval.

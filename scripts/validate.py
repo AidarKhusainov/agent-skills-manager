@@ -32,7 +32,7 @@ def main() -> None:
     required = [
         "plugin.json", ".codex-plugin/plugin.json", "assets/icon.svg",
         "skills/manage-skills/SKILL.md", "skills/manage-skills/agents/openai.yaml",
-        "README.md", "LICENSE", ".gitignore",
+        "README.md", "LICENSE", ".gitignore", ".agents/plugins/marketplace.json",
     ]
     for path in required:
         check((ROOT / path).is_file(), f"Required file missing: {path}")
@@ -56,6 +56,26 @@ def main() -> None:
     validate_path(primary["extensions"]["com.openai"]["onboardingSkill"], "skills/manage-skills/SKILL.md")
     validate_path(compatible["extensions"]["com.openai"]["onboardingSkill"], "skills/manage-skills/SKILL.md")
     validate_path(compatible["skills"], "skills")
+
+
+    # Local Git-backed catalog: exactly one safe, public, repo-root plugin entry.
+    marketplace = read_json(".agents/plugins/marketplace.json")
+    check(marketplace.get("name") == "agent-skills-manager", "Unexpected marketplace name")
+    check(marketplace.get("interface", {}).get("displayName") == DISPLAY_NAME, "Marketplace display name mismatch")
+    entries = marketplace.get("plugins")
+    check(isinstance(entries, list) and len(entries) == 1, "Marketplace must expose exactly one plugin")
+    entry = entries[0]
+    check(entry.get("name") == PACKAGE_NAME, "Marketplace plugin name mismatch")
+    check(entry.get("source") == {
+        "source": "url",
+        "url": "https://github.com/AidarKhusainov/agent-skills-manager.git",
+        "ref": "main",
+    }, "Marketplace must reference this repository's main branch")
+    check(entry.get("policy") == {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+    }, "Unexpected marketplace installation policy")
+    check(entry.get("category") == ui["category"], "Marketplace category mismatch")
 
     skill_dir = ROOT / "skills"
     check(sorted(p.name for p in skill_dir.iterdir()) == ["manage-skills"], "Only manage-skills may be shipped")

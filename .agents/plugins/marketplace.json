@@ -1,0 +1,21 @@
+{
+  "name": "agent-skills-manager",
+  "interface": {
+    "displayName": "Agent Skills Manager"
+  },
+  "plugins": [
+    {
+      "name": "skills-manager-public",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/AidarKhusainov/agent-skills-manager.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
