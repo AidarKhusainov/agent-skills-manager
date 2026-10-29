@@ -64,7 +64,7 @@ The release candidate adds three tests for `VERSION` mismatch, omission and malf
 
 ## v0.2.2 UX comparison
 
-The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated words**; the integrated `agent/validation-tests` version is **1,070** (~**36% fewer**). The shorter instruction explicitly routes discovery, status and mutation without requiring Plugin Creator for discovery or verified native operations.
+The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated words**; the current release-branch version after the Codex provenance correction is **1,181** (~**30% fewer**). Earlier integration measurements (1,070 words) predate that correction. The shorter instruction explicitly routes discovery, status and mutation without requiring Plugin Creator for discovery or verified native operations.
 
 | Dimension | v0.2.2 instructions | v0.2.3 candidate instructions |
 | --- | --- | --- |
@@ -106,3 +106,23 @@ The baseline `master` `SKILL.md` (`v0.2.2`) is **1,682 whitespace-separated word
 - [ ] Obtain release approval; **only then** merge, tag/publish or update Plugin Creator if explicitly authorized.
 
 **Release decision:** hold publication until review and applicable verification gates are satisfied. This PR deliberately neither publishes nor updates private user plugins.
+
+## Final independent readiness audit (2026-10-29)
+
+**Decision: NO-GO for publication until isolated mutation E2E has been executed.** This is an evidence gate, not evidence of data loss or an observed destructive failure.
+
+| Check | Result | Evidence / boundary |
+| --- | --- | --- |
+| PR #6 combined diff / stacked PR integration | PASS | 20 paths against `master`; no duplicate file paths. The architecture/discovery files from #1/#2 match the release branch byte-for-byte. #1–#5 remain open and overlap. |
+| Candidate source/package CI | PASS before final report edit; recheck latest HEAD | [Validate plugin source](https://github.com/AidarKhusainov/agent-skills-manager/actions) ran 26 unit tests and package validation after the workflow corrections. |
+| Real GitHub discovery | PASS | `AidarKhusainov/skills` at `56cb469463acda79921bf420eccf503881240d0b`; 35 complete tree entries, 4 verified metadata candidates, no writes or Creator calls. |
+| Unknown source / missing-ref API behavior | PASS at read-tool boundary only | A deliberately invalid GitHub ref returned HTTP 422; agent error wording was not executed as a runtime test. |
+| RU intent routing and readable status | SPEC REVIEW ONLY | Modes checked against four Russian phrases; no autonomous agent runtime invoked. |
+| Native Codex provenance | FIXED IN INSTRUCTIONS; E2E BLOCKED | Explicitly distinguish tracked vs untracked skills and pinned update skips; see `skills/manage/SKILL.md` and `skills/manage/references/operations.md`. No executable `gh` or `codex` was available in this test host. |
+| Install / reinstall / update / remove | BLOCKED | No authorized real native installer/runtime and no disposable private collection in this session. Static validation and a fabricated mock are not a substitute. |
+| Unauthorized write, concurrency and failure recovery | BLOCKED for agent runtime | Reviewed as conservative specification; permission-denied and write-timeout behavior not live-tested. |
+| v0.2.2 vs v0.2.3 tool/question/time benchmark | BLOCKED | No paired equivalent runtimes; words are a static comparison only. |
+
+New manual regression rows test native Codex provenance and pinned-update status. They are **not** counted as passing E2E. All mutations of user collections, production plugins, merges, tags and publication were excluded.
+
+**Release gate:** test a deliberately disposable native Codex directory with a verified persistent installer or an expressly approved isolated USER/PRIVATE collection; capture before/after files, source pin, no-op release behavior, permission failure, read-back and local adaptation handling. Recheck CI at the final HEAD and obtain a separate publication decision.
