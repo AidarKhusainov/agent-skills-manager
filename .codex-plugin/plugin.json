@@ -1,18 +1,30 @@
 {
+  "name": "agent-skills-manager",
+  "version": "0.2.2",
+  "description": "Discover user-selected GitHub Agent Skills; manage approved changes using verified native paths or an optional private collection.",
+  "author": {
+    "name": "Aidar"
+  },
+  "keywords": [
+    "agent-skills",
+    "github",
+    "skill-management"
+  ],
   "interface": {
     "displayName": "Agent Skills Manager",
     "shortDescription": "Discover and manage GitHub Agent Skills",
-    "longDescription": "Discover Agent Skills in GitHub repositories you choose. Review candidates and manage selected native skills in a separate private plugin that belongs to you. Installation, removal and updates require your explicit approval and access to Plugin Creator. The public manager includes no third-party skills or preset repositories; read-only repository discovery works without Plugin Creator.",
+    "longDescription": "Discover skills from GitHub repositories you select. Browse read-only, inspect accessible installed skills, and review one plan before changes. Prefer verified native skill installation where supported; provide manual ChatGPT Skills UI steps when write tools are unavailable. An authorized user-owned private Plugin Creator collection is an optional fallback. No preset repositories, third-party skills, or shared user data.",
     "developerName": "Aidar",
     "category": "Developer Tools",
     "capabilities": [
-      "Discover Agent Skills in user-selected GitHub repositories",
-      "Review and manage a private skill collection with Plugin Creator"
+      "Discover Agent Skills in user-selected GitHub repositories without installation",
+      "Inspect accessible installed skills and report unavailable status honestly",
+      "Plan approval-gated native or authorized private-collection changes"
     ],
     "defaultPrompt": [
-      "Find Agent Skills in a GitHub repository I'll provide. Ask for its URL and show the available skills.",
-      "Show my Agent Skills collection: installed skills, GitHub sources, pinned revisions, and available updates.",
-      "Check my installed Agent Skills for updates and show changes. Don't apply any updates yet."
+      "Find Agent Skills in a GitHub repository I will provide. Show candidates without installing anything.",
+      "Show the skills installed in my accessible collection, or explain which inventory is unavailable.",
+      "Check for updates to my installed skills. Show findings without applying any changes."
     ],
     "logo": "./assets/icon.svg",
     "composerIcon": "./assets/icon.svg"
@@ -22,16 +34,5 @@
       "onboardingSkill": "./skills/manage/SKILL.md"
     }
   },
-  "name": "agent-skills-manager",
-  "version": "0.2.2",
-  "description": "Discover user-selected GitHub Agent Skills and manage each user’s separate private collection with review and approval.",
-  "author": {
-    "name": "Aidar"
-  },
-  "keywords": [
-    "agent-skills",
-    "github",
-    "skill-management"
-  ],
   "skills": "./skills"
 }
