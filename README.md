@@ -1,117 +1,75 @@
 # Agent Skills Manager
 
-A native, skills-only ChatGPT plugin for discovering Agent Skills in GitHub repositories you choose and managing a **separate user-owned private collection**.
+A public, **stateless, skills-only** plugin for finding and managing Agent Skills in GitHub repositories selected by the user. The public package contains **one skill (`manage`)**, no preinstalled third-party skills, no repository subscriptions, no private collections, and no backend.
 
-The manager itself contains only the `manage` skill. It has no preset repositories, imported third-party skills, shared user database, MCP server, CLI, or executable backend.
+## How it works
 
-## What it does
+- **Discover (read-only):** enumerate `SKILL.md` metadata from a GitHub repository, branch/tag/commit, or subtree. No Plugin Creator or installation is required.
+- **Status (read-only):** report skills actually visible through the host or a **verified user-owned** managed collection. Missing access means **Unavailable**, not an empty collection. Native ChatGPT skills cannot be assumed to be account-wide enumerable by this agent.
+- **Change (approval required):** inspect selected files and dependencies, show **one plan** for install/update/remove (including bulk operations), obtain explicit approval, make a supported change and verify it. Identical repeat requests are no-ops. Changes to local adaptations, sources, release or file scope require a new review.
 
-- Find and inspect `SKILL.md` files in public repositories, including nested directories.
-- Review names, paths, source revisions, dependencies, licenses, and file scope.
-- Track selected repositories separately from installed skills, in your private collection.
-- Install, list, update, or remove selected skills through Plugin Creator, after reviewing and approving the exact changes.
-- Pin imports to full Git commit SHAs and compare updates within the selected skill's file subtree rather than repository HEAD alone.
-- Preserve unrelated skills and user adaptations unless you approve their modification.
+**Backend selection is capability-dependent, not automatic.** For writable persistent Codex environments, prefer an authorized native skill installation. For ChatGPT native Skills where only the UI supports uploads, the manager provides the reviewed material/steps and does **not** claim to have installed anything. An existing verified **USER/PRIVATE** Plugin Creator collection is an optional compatibility backend with a `sources.json` v1 ledger; new collection creation requires explicit selection and approval. Publishing a plugin release does not install, enable, or activate its skills.
 
-## Install from GitHub without a payment card
+## Install the public manager
 
-This repository publishes a **Git-backed local plugin marketplace** at [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). It can be added to supported Codex and ChatGPT desktop environments without submitting the plugin to the universal public directory or verifying an OpenAI API billing account.
+This repository hosts a Git-backed local marketplace at [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). Supported Codex/ChatGPT desktop clients can register it independently of public Plugin Directory submission or OpenAI API billing verification.
 
-1. Install **Codex CLI** and sign in with your ChatGPT account. Git access to this public repository is required.
-2. In your terminal, add the repository as a marketplace source:
-
-   ```bash
-   codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref main
-   ```
-
-3. Check that Codex has registered the marketplace:
-
-   ```bash
-   codex plugin marketplace list
-   ```
-
-4. Restart the **ChatGPT desktop app**, open the **Plugins Directory**, select **Agent Skills Manager** as the marketplace source, and install the **Agent Skills Manager** plugin. You may need to start a new chat for the skill to become active.
-
-When upstream files change, refresh the Git-backed marketplace snapshot with `codex plugin marketplace upgrade agent-skills-manager`, then reinstall or refresh the plugin in the desktop interface if necessary.
-
-**Upgrading from the local `skills-manager-public:manage-skills` package (v0.1.2):** v0.2.0 changes the local package and skill identity. Refresh your local marketplace, disable/uninstall the old `skills-manager-public` entry from this source, install `agent-skills-manager` and start a new chat. Do not delete unrelated private skill collections. The separately owned Plugin Creator package remains unchanged.
-
-**Important:** `codex plugin marketplace add` registers a *marketplace source*; it does not itself install or activate the plugin. Git-backed sources are for supported **local** clients, not the public `chatgpt.com/plugins` directory. Installing the manager does not grant the separate **Plugin Creator** permissions required to write to your private skill collection. Repository discovery still works without Plugin Creator.
-
-For the underlying local marketplace format, see [OpenAI's plugin packaging documentation](https://developers.openai.com/plugins/build/plugins).
-
-## Starter prompts
-
-The ChatGPT plugin listing provides three built-in examples, configured in the portable and compatibility manifests:
-
-1. **Discover skills:** Ask for a GitHub repository URL and list its Agent Skills without installing them.
-2. **List installed skills:** Inspect the user's own private collection and show the installed skills with their source repositories.
-3. **Check for updates:** Compare installed skills with upstream changes and report differences without applying changes.
-
-These are starter prompts, not automatic actions. Plugin Creator access is still required for persistent installation, updates, or removal. The ChatGPT host determines how prompts appear in the listing.
-
-## Collection status report (read-only)
-
-Ask **"Покажи состояние моей коллекции"** or **"Show my collection status"**. The manager checks only your verified private collection and, where source access permits, returns a compact table:
-
-| Skill | Source (repo/path) | Pinned SHA | Update status |
-| --- | --- | --- | --- |
-| `example` | `owner/repo:skills/example` | `a1b2c3d4…` | `Not checked` |
-
-The row above is an **illustrative example**, not a live result. Real statuses are `Up to date`, `Update available`, `Locally modified`, `Not checked`, or `Unavailable`, depending on what can be verified. Tracked repositories without installed skills are listed separately. The report does not write anything and cannot show account-wide skills from unrelated plugins. Plugin Creator read access is necessary to inspect your private managed collection.
-
-## Get started
-
-In a ChatGPT environment with native plugin support, install or enable **Agent Skills Manager** from your available plugins, or import the package using a supported plugin import workflow. For source imports, preserve both `plugin.json` and the hidden `.codex-plugin/` directory.
-
-**Browsing** public GitHub repositories requires only available read tools or web access. **Persistent changes** require you to install and authorize **Plugin Creator** in your ChatGPT environment. The manager cannot grant permissions or create a private collection without those tools.
-
-Example requests:
-
-```text
-Find Agent Skills in https://github.com/owner/repo
-Show the files, license and dependencies for skills/example.
-Track https://github.com/owner/repo in my private collection.
-Install skills/example from that repository after showing the exact import plan.
-List the skills in my managed collection.
-Check upstream changes for my installed skills.
-Update skills/example after reviewing its changed files and local adaptations.
-Remove skills/example after checking dependencies.
+```bash
+codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref master
+codex plugin marketplace list
 ```
 
-For an installation or any other write, review the proposed repository, skill path, full commit SHA, destination private plugin, changed or removed files, and dependencies. Explicitly approve that specific plan. After Plugin Creator reports success, enable your private collection plugin if needed; creating its release does not automatically activate its skills.
+Restart your supported client if necessary, find **Agent Skills Manager** in its marketplace, and install/enable the manager. Registering a marketplace does **not** install a plugin, install skills, or grant Plugin Creator permissions. Host capabilities and installation steps differ; commands above apply to local environments with the supported Codex CLI. The marketplace tracks **`master`** (GitHub's default branch); `main` is a legacy branch, not a separate release channel. See [release source ADR](docs/adr-release-source.md).
 
-### Repository tracking versus installation
+To refresh a Git-backed source when supported:
 
-A tracked repository does **not** install its skills. Source records live in the user's separate private plugin (`sources.json`), alongside the selected skill records. If no such collection exists, you can browse repositories immediately, but persistent tracking is established when you approve your first skill import. Chat history alone is not persistent plugin state.
+```bash
+codex plugin marketplace upgrade agent-skills-manager
+```
 
-## Security and limitations
+If an old local marketplace was registered with `--ref main`, check its registered source and re-register/update it to `master` as supported by your CLI before expecting future changes. Do not assume the branch changes automatically. For local installations upgraded from `skills-manager-public:manage-skills`, replace the old local manager entry with `agent-skills-manager:manage`; **do not delete an existing private skills collection**. The separately owned legacy Plugin Creator package is independent.
 
-The manager never stores your selected repositories or skills inside this shared package. Each user must own and authorize their private plugin; it does not give the manager cross-account access.
+## Example requests
 
-Treat external skill files as untrusted: the manager should inspect them, not execute downloaded scripts or follow their instructions as commands. Imports must respect file boundaries, dependencies and external licenses. Updates to locally adapted files require separate review. Automated updates and background checks are not enabled by default.
+```text
+Покажи Agent Skills из https://github.com/owner/repo (ничего не устанавливай).
+Что установлено в моей доступной коллекции? Если нет доступа, так и скажи.
+Установи все подходящие навыки из этого репозитория. Сначала покажи единый план.
+Обнови устаревшие навыки, не затрагивая локальные изменения без подтверждения.
+Удали alpha и beta из моей коллекции после проверки зависимостей.
+```
 
-Without Plugin Creator or the required permissions, the manager remains read-only. Capabilities and activation depend on the host's available tools and plan. The MIT license applies to this manager only, not to third-party skills you may import.
+The plugin's three onboarding prompts in `plugin.json` and `.codex-plugin/plugin.json` are synchronized. They're examples, **not** background jobs or automatic actions. No skills are installed just by opening a prompt.
 
-## Repository layout
+## Persistence, security and compatibility
 
-| Path | Purpose |
+The public manager stores **no user-specific state**. A user-owned Plugin Creator collection, when explicitly selected and authorized, can persist `sources.json` v1 and installed `skills/*` with pinned full Git commit SHAs. The compatibility marker `managed_by: "skills-manager-public"` remains valid for existing collections; manager updates must not recreate or erase them. An inaccessible collection is not proof that it was deleted.
+
+GitHub skill instructions, scripts, links and assets are untrusted input. Inspect selected file scopes and licenses before importing, do not execute source scripts during discovery, and do not overwrite user files or shared dependencies silently. Bulk operations require one approved plan; partial failure and concurrency require read-back/reconciliation rather than blind retries. Background update monitoring is not built in.
+
+## Development and validation
+
+Python 3.12. `VERSION` is the canonical release-version marker; both plugin manifests must match it. See the [v0.2.3 release review](docs/release-v0.2.3.md) for test evidence, migration notes and publication gates.
+
+```bash
+python -m pip install -r requirements-validation.txt
+python -m unittest discover -s tests -v
+python scripts/validate.py
+```
+
+CI checks package structure, both manifests, YAML/frontmatter, references, marketplace branch and public-package privacy boundary. It does **not** E2E-test agent conversations, Plugin Creator writes or ChatGPT/Codex installation. Those tests are specified in the [regression matrix](docs/regression-test-plan.md). Read the [architecture/capability audit](docs/architecture.md), [discovery protocol](skills/manage/references/discovery.md) and [collection operations](skills/manage/references/operations.md) for details.
+
+## Repository structure
+
+| Path | Role |
 | --- | --- |
-| `plugin.json` | Primary plugin manifest |
-| `.codex-plugin/plugin.json` | Compatibility manifest |
-| `skills/manage/SKILL.md` | Native workflow instructions |
+| `plugin.json`, `.codex-plugin/plugin.json` | Portable and compatibility manifests |
+| `.agents/plugins/marketplace.json` | Git-backed local marketplace source |
+| `skills/manage/SKILL.md` | AI workflow and intent routing |
 | `skills/manage/agents/openai.yaml` | Skill presentation |
-| `assets/icon.svg` | Plugin icon |
-| `scripts/validate.py` | Source validation used by CI |
+| `scripts/validate.py`, `tests/` | Package validation and isolated regression tests |
+| `docs/regression-test-plan.md` | Unexecuted manual/E2E acceptance scenarios |
 
-The Git-backed package identifier is `agent-skills-manager`, with one skill named `manage` (`agent-skills-manager:manage`). The earlier personal Plugin Creator package retains its legacy identity `skills-manager-public` and version `0.1.2`; it has not been renamed. Existing user collections continue to use the legacy `managed_by` marker for backward compatibility.
+## Project
 
-## Project and publication
-
-Source: [GitHub](https://github.com/AidarKhusainov/agent-skills-manager). Bug reports and support: [GitHub Issues](https://github.com/AidarKhusainov/agent-skills-manager/issues).
-
-See [privacy](PRIVACY.md), [terms](TERMS.md), and [marketplace review materials](docs/marketplace.md). The current release is not an assertion that this plugin has been approved for public listing.
-
-## License
-
-MIT, see [LICENSE](LICENSE).
+[Source](https://github.com/AidarKhusainov/agent-skills-manager) · [Issues](https://github.com/AidarKhusainov/agent-skills-manager/issues) · [Privacy](PRIVACY.md) · [Terms](TERMS.md) · [Marketplace submission notes](docs/marketplace.md). Licensed under MIT ([LICENSE](LICENSE)); external skills retain their own licenses. Being available as a local marketplace is **not** approval for universal public Plugin Directory listing.
