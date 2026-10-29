@@ -51,6 +51,14 @@ The data above is illustrative. It is **not** a default repository, an installed
 
 For preflight and post-write checks, preserve an in-memory observation of plugin ID, scope, privacy, current release ID, source manifest and relevant file hashes. Treat local observations as ephemeral: a new conversation or retry must read the collection again.
 
+### Native Codex provenance and update status
+
+These `sources.json` rules apply to the optional Plugin Creator collection; they are **not** automatically implemented by native Codex filesystem installation. In a verified local Codex environment, GitHub CLI `gh skill install --agent codex` can inject source tracking metadata into installed `SKILL.md`; `gh skill list --agent codex` can expose recorded origin. Verify actual CLI support, persistence, installed paths and metadata rather than assuming the binary or commands exist. The legacy Codex `$skill-installer` copies directories and does not guarantee a durable pinned source record. Treat its output as `Untracked` unless separate provenance can be independently verified. Do not introduce an unapproved user-wide ledger or private plugin merely to simulate tracking.
+
+`gh skill update --dry-run` is read-only but **skips pinned skills**; skipped is `Not checked`, not `Up to date`. It compares stored source tree metadata, which does not by itself establish the manager's complete selected dependency-closure comparison or absence of local adaptations. Where exact source pin, ref and dependency paths cannot be recovered, return upstream status `Unavailable`. For any automated native change, validate local modifications and source-owned files before applying updates; never run `--force` or `--unpin` without separate reviewed approval. If provenance-aware installation is unavailable, disclose the loss of managed update capability as part of the plan; successful installation alone does not imply managed updates.
+
+Official CLI contracts: https://cli.github.com/manual/gh_skill_install , https://cli.github.com/manual/gh_skill_list , https://cli.github.com/manual/gh_skill_update .
+
 ## 3. Operation semantics
 
 | Operation | Selector and meaning | Read/write outcome |
