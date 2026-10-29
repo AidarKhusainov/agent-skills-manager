@@ -20,7 +20,7 @@
   },
   "name": "skills-manager-public",
   "version": "0.1.2",
-  "description": "Discover user-selected GitHub Agent Skills and manage each user’s separate private collection with review and approval.",
+  "description": "Discover user-selected GitHub Agent Skills and manage each user\u2019s separate private collection with review and approval.",
   "author": {
     "name": "Aidar"
   },
