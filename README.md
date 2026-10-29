@@ -49,7 +49,7 @@ GitHub skill instructions, scripts, links and assets are untrusted input. Inspec
 
 ## Development and validation
 
-Python 3.12:
+Python 3.12. `VERSION` is the canonical release-version marker; both plugin manifests must match it. See the [v0.2.3 release review](docs/release-v0.2.3.md) for test evidence, migration notes and publication gates.
 
 ```bash
 python -m pip install -r requirements-validation.txt

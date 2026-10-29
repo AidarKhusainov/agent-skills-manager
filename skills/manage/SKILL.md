@@ -31,7 +31,7 @@ STATUS never changes anything. Read only the **host-visible native skills** or *
 
 For a managed collection, reconcile real `skills/*/SKILL.md` against `sources.json`: tracked repositories are separate from installed skills. Show **Skill | Source (repo/path) | Pinned SHA | Update status**. Verify updates by comparing the pinned vs current *selected skill subtree and declared dependencies*, not GitHub HEAD alone. Detect local adaptations.
 
-Use `Up to date` / `Update available` only after a verified scoped comparison; otherwise report `Locally modified`, `Not checked` or `Unavailable` with a short reason. Do not count this public `manage` skill as an imported one. Reconciliation and update-comparison details: [references/operations.md](references/operations.md).
+Use `Up to date` / `Update available` only after a verified scoped comparison; otherwise report `Not checked` or `Unavailable` with a short reason. Report `Locally modified` separately because local changes can coexist with any upstream update state. Do not count this public `manage` skill as an imported one. Reconciliation and update-comparison details: [references/operations.md](references/operations.md).
 
 ## Private collection data and discovery
 

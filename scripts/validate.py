@@ -16,7 +16,7 @@ DISPLAY = "Agent Skills Manager"
 RELEASE_BRANCH = "master"  # GitHub's default / canonical release branch.
 REPO_URL = "https://github.com/AidarKhusainov/agent-skills-manager.git"
 REQUIRED = (
-    "plugin.json", ".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
+    "VERSION", "plugin.json", ".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
     "skills/manage/SKILL.md", "skills/manage/agents/openai.yaml",
     "assets/icon.svg", "README.md", "LICENSE", ".gitignore",
 )
@@ -119,9 +119,14 @@ def validate(root: Path = ROOT) -> None:
         require("email" not in author, f"{name}: do not publish author email")
         require(isinstance(manifest.get("keywords"), list), f"{name}: keywords must be a list")
     version = primary.get("version")
+    expected_version = (root / "VERSION").read_text(encoding="utf-8").strip()
+    require(re.fullmatch(r"(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?", expected_version) is not None,
+            "VERSION: invalid semantic version")
     require(isinstance(version, str) and re.fullmatch(r"0|[1-9]\d*", version.split(".")[0]) is not None
             and re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?", version) is not None,
             "Invalid semantic version")
+    require(version == expected_version,
+            f"Manifest version {version!r} does not match VERSION {expected_version!r}")
     for field in ("name", "version", "description", "author", "keywords"):
         require(primary.get(field) == compatible.get(field), f"Manifest mismatch: {field}")
     package_path(root, compatible.get("skills"), "skills")

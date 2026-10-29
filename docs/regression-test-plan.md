@@ -12,7 +12,7 @@ python -m unittest discover -s tests -v
 python scripts/validate.py
 ```
 
-CI performs the same checks, plus `compileall`, on PRs (including stacked changes against `agent/workflow-redesign`) and pushes to `master`/`main`. Tests build isolated temporary package fixtures; they do not run external skills, talk to GitHub/Plugin Creator, or modify a user collection. A passing CI run proves only local package invariants, not successful installation.
+CI performs the same checks, plus `compileall`, on PRs targeting `master` (and the stacked compatibility branch) and pushes to `master`/`main`. Tests build isolated temporary package fixtures; they do not run external skills, talk to GitHub/Plugin Creator, or modify a user collection. A passing CI run proves only local package invariants, not successful installation.
 
 Covered by unit tests: schema-adjacent manifest validation and sync, semantic version equality (without a hard-coded release number), YAML/frontmatter parsing, starter prompts, marketplace source and policy, local reference existence, single manager-skill boundary, source ledger and credential file exclusions, high-confidence secret tokens, symlinks, duplicate JSON keys and SVG validity. Unit tests deliberately allow rewritten headings and wording in `SKILL.md`.
 

@@ -1,6 +1,6 @@
 {
   "name": "agent-skills-manager",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Discover user-selected GitHub Agent Skills; manage approved changes using verified native paths or an optional private collection.",
   "author": {
     "name": "Aidar"

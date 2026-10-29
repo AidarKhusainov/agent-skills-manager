@@ -19,6 +19,7 @@ class ValidatorTests(unittest.TestCase):
         self.write("README.md", "# Manager\n")
         self.write("LICENSE", "MIT\n")
         self.write(".gitignore", ".env\n")
+        self.write("VERSION", "0.2.3\n")
         self.write("assets/icon.svg", '<svg xmlns="http://www.w3.org/2000/svg"/>')
         self.write("skills/manage/SKILL.md", "---\nname: manage\ndescription: Safe skill discovery.\n---\n\n# New heading\nSee [operations](references/operations.md).\n")
         self.write("skills/manage/references/operations.md", "# Workflow details\n")
@@ -31,7 +32,7 @@ class ValidatorTests(unittest.TestCase):
             "logo": "./assets/icon.svg", "composerIcon": "./assets/icon.svg",
         }
         core = {
-            "name": "agent-skills-manager", "version": "0.2.2", "description": "Public manager",
+            "name": "agent-skills-manager", "version": "0.2.3", "description": "Public manager",
             "author": {"name": "Aidar"}, "keywords": ["github"],
         }
         self.primary = dict(core, extensions={"com.openai": {"interface": ui, "onboardingSkill": "./skills/manage/SKILL.md"}})
@@ -64,8 +65,22 @@ class ValidatorTests(unittest.TestCase):
 
     def test_version_change_is_allowed_when_manifests_match(self):
         self.primary["version"] = self.compat["version"] = "1.2.3"
+        self.write("VERSION", "1.2.3\n")
         self.save_manifests()
         validate(self.root)
+
+    def test_release_version_drift_rejected(self):
+        self.primary["version"] = self.compat["version"] = "0.2.4"
+        self.save_manifests()
+        self.assert_rejected("does not match VERSION")
+
+    def test_missing_release_version_file_rejected(self):
+        (self.root / "VERSION").unlink()
+        self.assert_rejected("Missing required file")
+
+    def test_invalid_release_version_file_rejected(self):
+        self.write("VERSION", "not-semver\n")
+        self.assert_rejected("VERSION: invalid semantic version")
 
     def test_mismatched_versions_rejected(self):
         self.primary["version"] = "2.0.0"
