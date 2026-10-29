@@ -1,4 +1,4 @@
 interface:
   display_name: "Agent Skills Manager"
-  short_description: "Build and manage your own Agent Skills collection"
-  default_prompt: "Show the Agent Skills in this GitHub repository and let me choose which to install."
+  short_description: "Discover and manage Agent Skills with minimal steps"
+  default_prompt: "Find Agent Skills in this GitHub repository. Show a concise list without installing anything."
