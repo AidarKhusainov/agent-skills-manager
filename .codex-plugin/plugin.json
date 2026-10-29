@@ -15,12 +15,12 @@
   },
   "extensions": {
     "com.openai": {
-      "onboardingSkill": "./skills/manage-skills/SKILL.md"
+      "onboardingSkill": "./skills/manage/SKILL.md"
     }
   },
-  "name": "skills-manager-public",
-  "version": "0.1.2",
-  "description": "Discover user-selected GitHub Agent Skills and manage each user\u2019s separate private collection with review and approval.",
+  "name": "agent-skills-manager",
+  "version": "0.2.0",
+  "description": "Discover user-selected GitHub Agent Skills and manage each user’s separate private collection with review and approval.",
   "author": {
     "name": "Aidar"
   },

@@ -9,8 +9,8 @@ from xml.etree import ElementTree
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_NAME = "skills-manager-public"
-VERSION = "0.1.2"
+PACKAGE_NAME = "agent-skills-manager"
+VERSION = "0.2.0"
 DISPLAY_NAME = "Agent Skills Manager"
 
 
@@ -31,7 +31,7 @@ def validate_path(value: str, expected: str) -> None:
 def main() -> None:
     required = [
         "plugin.json", ".codex-plugin/plugin.json", "assets/icon.svg",
-        "skills/manage-skills/SKILL.md", "skills/manage-skills/agents/openai.yaml",
+        "skills/manage/SKILL.md", "skills/manage/agents/openai.yaml",
         "README.md", "LICENSE", ".gitignore", ".agents/plugins/marketplace.json",
     ]
     for path in required:
@@ -53,8 +53,8 @@ def main() -> None:
     check(bool(ui.get("defaultPrompt")), "Onboarding prompt required")
     for icon in ("logo", "composerIcon"):
         validate_path(ui[icon], "assets/icon.svg")
-    validate_path(primary["extensions"]["com.openai"]["onboardingSkill"], "skills/manage-skills/SKILL.md")
-    validate_path(compatible["extensions"]["com.openai"]["onboardingSkill"], "skills/manage-skills/SKILL.md")
+    validate_path(primary["extensions"]["com.openai"]["onboardingSkill"], "skills/manage/SKILL.md")
+    validate_path(compatible["extensions"]["com.openai"]["onboardingSkill"], "skills/manage/SKILL.md")
     validate_path(compatible["skills"], "skills")
 
 
@@ -78,17 +78,17 @@ def main() -> None:
     check(entry.get("category") == ui["category"], "Marketplace category mismatch")
 
     skill_dir = ROOT / "skills"
-    check(sorted(p.name for p in skill_dir.iterdir()) == ["manage-skills"], "Only manage-skills may be shipped")
-    check(sorted(str(p.relative_to(skill_dir)) for p in skill_dir.rglob("SKILL.md")) == ["manage-skills/SKILL.md"], "Unexpected additional skill")
+    check(sorted(p.name for p in skill_dir.iterdir()) == ["manage"], "Only manage-skills may be shipped")
+    check(sorted(str(p.relative_to(skill_dir)) for p in skill_dir.rglob("SKILL.md")) == ["manage/SKILL.md"], "Unexpected additional skill")
     check(not (ROOT / "sources.json").exists(), "User collection state cannot be bundled")
 
     skill = (skill_dir / "manage-skills/SKILL.md").read_text(encoding="utf-8")
     frontmatter = re.match(r"\A---\r?\n(.*?)\r?\n---\r?\n", skill, re.DOTALL)
     check(frontmatter is not None, "SKILL.md needs YAML frontmatter")
     meta = yaml.safe_load(frontmatter.group(1))
-    check(isinstance(meta, dict) and meta.get("name") == "manage-skills", "Invalid skill name")
+    check(isinstance(meta, dict) and meta.get("name") == "manage", "Invalid skill name")
     check(isinstance(meta.get("description"), str) and meta["description"].strip(), "Description required")
-    check('managed_by: "skills-manager-public"' in skill, "User-collection marker changed")
+    check('managed_by: "skills-manager-public"' in skill, "Legacy collection marker changed")
     openai = yaml.safe_load((skill_dir / "manage-skills/agents/openai.yaml").read_text(encoding="utf-8"))
     check(openai["interface"]["display_name"] == DISPLAY_NAME, "Skill display name mismatch")
     check(bool(openai["interface"]["default_prompt"]), "Skill default prompt missing")

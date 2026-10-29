@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "skills-manager-public",
+      "name": "agent-skills-manager",
       "source": {
         "source": "url",
         "url": "https://github.com/AidarKhusainov/agent-skills-manager.git",

@@ -1,13 +1,13 @@
 ---
-name: manage-skills
+name: manage
 description: Discover native Agent Skills in user-provided GitHub repositories, then manage a separate user-owned private collection through Plugin Creator after explicit approval.
 ---
 
-# Skills Manager
+# Agent Skills Manager
 
 ## Core scope and onboarding
 
-This package contains **only `manage-skills`**: no preinstalled repositories, imported skills, personal user data, background jobs, or shared mutable collection. Users choose their own GitHub sources. Do not modify this public manager to install their selections.
+This package contains **only `manage`**: no preinstalled repositories, imported skills, personal user data, background jobs, or shared mutable collection. Users choose their own GitHub sources. Do not modify this public manager to install their selections.
 
 First use: briefly explain that browsing public GitHub repositories needs only normal read tools, while persistently installing/updating/removing native skills requires the user to have **Plugin Creator installed and accessible**. This plugin cannot grant those permissions or install Plugin Creator automatically. User-installed skills live in a **separate private plugin owned by that user**, not in this public package. If the current conversation lacks Plugin Creator, offer to browse and review candidates, and explain how to install or invoke Plugin Creator for a write operation. Never claim a skill has been installed solely because this manager was installed.
 
@@ -16,7 +16,7 @@ Examples of natural requests:
 - **"Покажи skills в этом GitHub-репозитории" / "Find skills in repo"**: Read the repository using available GitHub tools or web browsing. Accept a repository, branch, or tree/directory URL; resolve owner/repo, ref and paths, including nested `SKILL.md` files. Show verified names, paths and brief descriptions; do not install or persist anything.
 - **"Добавь репозиторий" / "Track this repo"**: Browse its skills and explain that tracking a source is distinct from installing any skill. If an existing personal collection is available, propose adding a source record there after approval. For a first-time user with no private collection, a repository can be browsed without storage; establish persistent tracking when the user approves their first selected skill. Do not create an empty placeholder or imply that chat history is persistent plugin state.
 - **"Установи skill" / "Install this skill"**: Resolve exact source/path/ref and dependencies, show an import plan, request explicit approval, then use Plugin Creator to create or update **only the user's private collection**. Never publish a change to this manager for an individual's selection.
-- **"Какие skills установлены?" / "List my skills"**: Discover and verify the user's managed private collection. List `skills/*/SKILL.md` plus the selected source details; do not count `manage-skills` from this public plugin. If there is no private collection, state this and do not assume another owned plugin is managed by this one.
+- **"Какие skills установлены?" / "List my skills"**: Discover and verify the user's managed private collection. List `skills/*/SKILL.md` plus the selected source details; do not count `manage` from this public plugin. If there is no private collection, state this and do not assume another owned plugin is managed by this one.
 - **"Удали skill" / "Remove this skill"**: Check dependencies and exact paths, show the impact, request approval, delete only those files/records in the private collection and verify.
 - **"Есть обновления?" / "Check updates"**: Compare pinned and current upstream content *within each selected skill subtree* and declared dependencies, not merely repository HEAD. Report verified changes without modifying anything.
 - **"Обнови skill" / "Update this skill"**: Present changed files, dependency/adaptation effects and risks, request approval, apply only accepted changes to the private collection, and verify.
@@ -25,7 +25,7 @@ Use the user's provided names/paths without redundant questions. Ask only the ne
 
 ## Private collection data and discovery
 
-Use Plugin Creator's `list_owned_personal_plugins` **if available** to find eligible personal plugins. Check candidates with `get_plugin_files` and verify root `sources.json` has `managed_by: "skills-manager-public"` and the current release. Avoid hardcoded plugin IDs, matching by display name alone or accessing someone else's plugin. If multiple verified personal collections exist, ask which to modify. Do not automatically adopt an unrelated/legacy plugin; require explicit user choice and migration approval. If Plugin Creator is unavailable or ownership cannot be verified, remain read-only and describe the limit.
+Use Plugin Creator's `list_owned_personal_plugins` **if available** to find eligible personal plugins. Check candidates with `get_plugin_files` and verify root `sources.json` has the legacy compatibility marker `managed_by: "skills-manager-public"` and the current release. Keep this persisted marker unchanged during local plugin renaming so collections created by prior releases remain discoverable. Avoid hardcoded plugin IDs, matching by display name alone or accessing someone else's plugin. If multiple verified personal collections exist, ask which to modify. Do not automatically adopt an unrelated/legacy plugin; require explicit user choice and migration approval. If Plugin Creator is unavailable or ownership cannot be verified, remain read-only and describe the limit.
 
 The private collection contains normal plugin manifests, `skills/<installed-name>/SKILL.md`, necessary support files, and private root `sources.json` tracking verified repositories and selected skills. Suggested `sources.json` schema:
 

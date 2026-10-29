@@ -2,7 +2,7 @@
 
 A native, skills-only ChatGPT plugin for discovering Agent Skills in GitHub repositories you choose and managing a **separate user-owned private collection**.
 
-The manager itself contains only the `manage-skills` skill. It has no preset repositories, imported third-party skills, shared user database, MCP server, CLI, or executable backend.
+The manager itself contains only the `manage` skill. It has no preset repositories, imported third-party skills, shared user database, MCP server, CLI, or executable backend.
 
 ## What it does
 
@@ -33,6 +33,8 @@ This repository publishes a **Git-backed local plugin marketplace** at [`.agents
 4. Restart the **ChatGPT desktop app**, open the **Plugins Directory**, select **Agent Skills Manager** as the marketplace source, and install the **Agent Skills Manager** plugin. You may need to start a new chat for the skill to become active.
 
 When upstream files change, refresh the Git-backed marketplace snapshot with `codex plugin marketplace upgrade agent-skills-manager`, then reinstall or refresh the plugin in the desktop interface if necessary.
+
+**Upgrading from the local `skills-manager-public:manage-skills` package (v0.1.2):** v0.2.0 changes the local package and skill identity. Refresh your local marketplace, disable/uninstall the old `skills-manager-public` entry from this source, install `agent-skills-manager` and start a new chat. Do not delete unrelated private skill collections. The separately owned Plugin Creator package remains unchanged.
 
 **Important:** `codex plugin marketplace add` registers a *marketplace source*; it does not itself install or activate the plugin. Git-backed sources are for supported **local** clients, not the public `chatgpt.com/plugins` directory. Installing the manager does not grant the separate **Plugin Creator** permissions required to write to your private skill collection. Repository discovery still works without Plugin Creator.
 
@@ -77,12 +79,12 @@ Without Plugin Creator or the required permissions, the manager remains read-onl
 | --- | --- |
 | `plugin.json` | Primary plugin manifest |
 | `.codex-plugin/plugin.json` | Compatibility manifest |
-| `skills/manage-skills/SKILL.md` | Native workflow instructions |
-| `skills/manage-skills/agents/openai.yaml` | Skill presentation |
+| `skills/manage/SKILL.md` | Native workflow instructions |
+| `skills/manage/agents/openai.yaml` | Skill presentation |
 | `assets/icon.svg` | Plugin icon |
 | `scripts/validate.py` | Source validation used by CI |
 
-The stable internal package name remains `skills-manager-public`. The user-facing name is **Agent Skills Manager**. Source and releases should match after each update.
+The Git-backed package identifier is `agent-skills-manager`, with one skill named `manage` (`agent-skills-manager:manage`). The earlier personal Plugin Creator package retains its legacy identity `skills-manager-public` and version `0.1.2`; it has not been renamed. Existing user collections continue to use the legacy `managed_by` marker for backward compatibility.
 
 ## Project and publication
 

@@ -43,6 +43,14 @@ Negative cases:
 - Kept the existing `manage-skills` workflow, GitHub discovery, explicit approval, pinned SHA tracking and subtree-based update checks unchanged.
 - Limits: writing requires separately authorized Plugin Creator; no background updates; third-party skill safety and licensing require review; public directory approval is a separate process.
 
+## Git-backed package v0.2.0 (identity migration)
+
+- Renamed the Git-backed package from `skills-manager-public` to `agent-skills-manager` and its only skill from `manage-skills` to `manage`, yielding `agent-skills-manager:manage`.
+- Updated both manifests, marketplace entry, onboarding paths, README and source validation.
+- Preserved `managed_by: "skills-manager-public"` for existing private collections.
+- Breaking local identity change: refresh the marketplace, disable/uninstall the former local package, and install the renamed package.
+- The separately owned Plugin Creator release `0.1.2` has not been modified.
+
 ## Git-backed distribution (outside the public directory)
 
 This repo also serves a local marketplace from `.agents/plugins/marketplace.json`. Consumers with a supported Codex CLI / ChatGPT desktop setup can register it using:
@@ -51,7 +59,7 @@ This repo also serves a local marketplace from `.agents/plugins/marketplace.json
 codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref main
 ```
 
-The marketplace entry points to this repo's plugin root on `main` and exposes only `skills-manager-public`. The marketplace is not submitted to the universal OpenAI Plugin Directory. Billing/organization verification for public directory submission is a separate process. Installing from this source does **not** install Plugin Creator or grant write access to private collections.
+The marketplace entry points to this repo's plugin root on `main` and exposes only `agent-skills-manager`. The marketplace is not submitted to the universal OpenAI Plugin Directory. Billing/organization verification for public directory submission is a separate process. Installing from this source does **not** install Plugin Creator or grant write access to private collections.
 
 ## Before submission
 
