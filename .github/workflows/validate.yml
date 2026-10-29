@@ -1,0 +1,22 @@
+name: Validate plugin source
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install minimal YAML parser
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.3
+      - name: Validate manifests and skill package
+        run: python scripts/validate.py
