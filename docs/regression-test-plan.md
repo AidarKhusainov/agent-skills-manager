@@ -16,6 +16,21 @@ CI performs the same checks, plus `compileall`, on PRs targeting `master` (and t
 
 Covered by unit tests: schema-adjacent manifest validation and sync, semantic version equality (without a hard-coded release number), YAML/frontmatter parsing, starter prompts, marketplace source and policy, local reference existence, single manager-skill boundary, source ledger and credential file exclusions, high-confidence secret tokens, symlinks, duplicate JSON keys and SVG validity. Unit tests deliberately allow rewritten headings and wording in `SKILL.md`.
 
+## Agent skill selection and routing acceptance
+
+Skill selection is a separate runtime acceptance gate from `SKILL.md` correctness. Package validation and checking trigger phrases in text **do not prove** which skill Codex loads. Use a supported Codex/ChatGPT installation with the manager actually enabled and a disposable test directory. In each case record the **identity of the loaded skill**, the chosen workflow and whether unauthorized writes occurred. Do not measure speed, latency, A/B benchmarks or tool invocation counts.
+
+| Prompt / environment | Expected observation | Result before runtime execution |
+| --- | --- | --- |
+| Bare Russian: `Установи все skills из https://github.com/owner/repo` | Prefer the installed `manage` skill for GitHub repository-wide reconciliation; if a different skill is selected, **FAIL automatic routing** | NOT RUN for 0.2.5 |
+| Explicit `@Agent Skills Manager` selection + same request | Confirm `manage/SKILL.md` is loaded, then execute safe manager preflight; actual write still needs approval | NOT RUN |
+| Codex skill-picker / `/skills` selection of `manage` | Explicit selection reaches the manager, not only the system `skill-installer` | NOT RUN |
+| Generic single-skill installation with no selected manager | May correctly use the host `skill-installer`; avoid overtriggering the manager | NOT RUN |
+| Installed manager disabled, unavailable or stale cached release | State that manager routing cannot be verified; do not treat other skills as manager E2E | NOT RUN |
+| Source already installed and locally modified | With `manage` actually loaded, read-only comparison preserves modifications without a speculative approval prompt | NOT RUN |
+
+A live failure to select `manage` is distinct from failure *inside* `manage`. If a host loads `using-superpowers` first, verify whether the manager was subsequently selected before assigning the result to the manager. Do not disable, rename or edit unrelated user/system skills as a routing workaround.
+
 ## E2E prerequisites and evidence
 
 Use a **dedicated disposable USER/PRIVATE test collection**, never the real user collection or shared manager. Record host (Codex local vs ChatGPT Skills UI vs Plugin Creator), available permissions, source repository and pinned full commit SHA, collection ID/privacy/release ID, and independently observed installed/enabled/active states. For mutation tests, prepare a controlled GitHub fixture containing `alpha` and `beta` skills, nested paths, one unrelated file, shared dependency, and two fixture commits (A/B) with known file-level changes. Prepare explicit written approval for each *concrete* plan, and deny one plan on purpose. Do not execute untrusted scripts. Capture redacted plans, approval decisions, release IDs and before/after file inventory and hashes. If tools or UI are missing, mark **Blocked / not executed** rather than passing.

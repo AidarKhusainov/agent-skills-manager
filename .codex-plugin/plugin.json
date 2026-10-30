@@ -1,7 +1,7 @@
 {
   "name": "agent-skills-manager",
-  "version": "0.2.4",
-  "description": "Discover user-selected GitHub Agent Skills; manage approved changes using verified native paths or an optional private collection.",
+  "version": "0.2.5",
+  "description": "Install, discover, list, update and remove Agent Skills from user-selected GitHub repositories.",
   "author": {
     "name": "Aidar"
   },
@@ -12,19 +12,20 @@
   ],
   "interface": {
     "displayName": "Agent Skills Manager",
-    "shortDescription": "Discover and manage GitHub Agent Skills",
-    "longDescription": "Discover skills from GitHub repositories you select. Browse read-only, inspect accessible installed skills, and review one plan before changes. Prefer verified native skill installation where supported; provide manual ChatGPT Skills UI steps when write tools are unavailable. An authorized user-owned private Plugin Creator collection is an optional fallback. No preset repositories, third-party skills, or shared user data.",
+    "shortDescription": "Install and manage Agent Skills from GitHub",
+    "longDescription": "Install all or selected Agent Skills from GitHub repositories you choose, inspect existing skills, preserve local changes, and manage updates or removal after reviewing any actual write. Repository browsing and comparisons are read-only. Native installation depends on available permissions; Plugin Creator is an optional verified fallback. No preset repositories or shared user data.",
     "developerName": "Aidar",
     "category": "Developer Tools",
     "capabilities": [
-      "Discover Agent Skills in user-selected GitHub repositories without installation",
-      "Inspect accessible installed skills and report unavailable status honestly",
-      "Plan approval-gated native or authorized private-collection changes"
+      "Discover and install all or selected skills from a user-provided GitHub repository",
+      "Reconcile existing local skills without overwriting user modifications",
+      "List managed skills, check source updates and plan approved changes"
     ],
     "defaultPrompt": [
-      "Find Agent Skills in a GitHub repository I will provide. Show candidates without installing anything.",
-      "Show the skills installed in my accessible collection, or explain which inventory is unavailable.",
-      "Check for updates to my installed skills. Show findings without applying any changes."
+      "Use Agent Skills Manager to install all Agent Skills from a GitHub repository I provide. Preserve existing local changes and ask once before any actual write.",
+      "Show my installed Agent Skills and verified update status.",
+      "Find Agent Skills in a GitHub repository I provide, without installing them.",
+      "Check my installed Agent Skills for updates without modifying anything."
     ],
     "logo": "./assets/icon.svg",
     "composerIcon": "./assets/icon.svg"
