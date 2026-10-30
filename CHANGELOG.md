@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.5] - 2026-10-30 (proposed)
+
+### Fixed
+- Make the `manage` skill discoverable for repository-wide installation requests, including Russian `Установи все skills из ...`.
+- Put installation/reconciliation first in plugin starter prompts and skill presentation metadata, keeping both manifests consistent.
+- Clarify that the generic system `skill-installer` can be an execution helper but does not replace an explicitly selected manager workflow.
+- Document reliable explicit plugin/skill selection and a separate manual routing acceptance plan.
+
+### Limits
+- The host, not a `SKILL.md` instruction, decides automatic skill selection. Metadata changes improve the match but cannot guarantee selection.
+- Runtime routing scenarios have not yet been executed; no claims of verified automatic activation.
+
+
 ## [0.2.4] - 2026-10-30 (proposed)
 
 ### Fixed
