@@ -31,7 +31,7 @@ The local marketplace catalog `.agents/plugins/marketplace.json` uses the canoni
 codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref master
 ```
 
-`main` existed with identical contents at the initial 2026-10-29 branch check, but GitHub does not keep the two refs synchronized automatically. See [ADR](adr-release-source.md). The source release candidate is **0.2.3** in both manifests and `VERSION`; a GitHub PR or merge alone does not publish, install or activate a plugin release. The Git-backed package identity is `agent-skills-manager:manage`; the private-collection legacy marker `managed_by: "skills-manager-public"` and `sources.json` v1 compatibility are retained. Upgrading the manager must not replace a user's private collection.
+`main` existed with identical contents at the initial 2026-10-29 branch check, but GitHub does not keep the two refs synchronized automatically. See [ADR](adr-release-source.md). The proposed source version is **0.2.4** in both manifests and `VERSION`; a GitHub PR or merge alone does not publish, install or activate a plugin release. The Git-backed package identity is `agent-skills-manager:manage`; the private-collection legacy marker `managed_by: "skills-manager-public"` and `sources.json` v1 compatibility are retained. Upgrading the manager must not replace a user's private collection.
 
 ## Validation boundaries
 

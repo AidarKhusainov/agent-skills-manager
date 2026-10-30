@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.4] - 2026-10-30 (proposed)
+
+### Fixed
+- Complete read-only installation preflight without additional confirmation to inspect files or prepare a plan; host permission prompts still apply.
+- Treat install and update as distinct requests: no automatic update of existing local skills, metadata adoption or forced overwrites.
+- Report equivalent existing skills as no-change and local adaptations as `Locally modified — preserved`, reserving `Conflict` for actual proposed colliding writes.
+- Distinguish line-ending-only differences from substantive changes, and avoid claiming complete equality or source provenance from partial comparisons.
+
+### Validation
+- Expand the manual agent E2E matrix for preflight, repeat installs, untracked/equivalent content, local edits and incomplete comparisons.
+- Source and package validation run in CI; these additions are behavioral instructions, not automatically verified agent E2E.
+
+
 ## [0.2.3] - 2026-10-29 (release candidate)
 
 ### Changed
