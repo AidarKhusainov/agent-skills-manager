@@ -17,9 +17,10 @@
 
 ## Onboarding examples
 
-1. Discover skills from a GitHub repository URL without installing anything.
-2. Show the accessible installed skills and identify inventories that cannot be verified.
-3. Check updates without applying them, and prepare an approval-gated plan only if requested.
+1. Install all or selected skills from a user-provided GitHub repository, preserving local changes and approving only necessary writes.
+2. Show accessible installed skills and explain unavailable provenance.
+3. Discover skills from a GitHub repository without installing anything.
+4. Check installed skills for updates without applying changes.
 
 The portable and compatibility manifests share one set of prompts, capabilities, names and icons. These are example interactions, not an auto-executing workflow.
 
@@ -31,7 +32,7 @@ The local marketplace catalog `.agents/plugins/marketplace.json` uses the canoni
 codex plugin marketplace add AidarKhusainov/agent-skills-manager --ref master
 ```
 
-`main` existed with identical contents at the initial 2026-10-29 branch check, but GitHub does not keep the two refs synchronized automatically. See [ADR](adr-release-source.md). The proposed source version is **0.2.4** in both manifests and `VERSION`; a GitHub PR or merge alone does not publish, install or activate a plugin release. The Git-backed package identity is `agent-skills-manager:manage`; the private-collection legacy marker `managed_by: "skills-manager-public"` and `sources.json` v1 compatibility are retained. Upgrading the manager must not replace a user's private collection.
+`main` existed with identical contents at the initial 2026-10-29 branch check, but GitHub does not keep the two refs synchronized automatically. See [ADR](adr-release-source.md). The proposed source version is **0.2.5** in both manifests and `VERSION`; a GitHub PR or merge alone does not publish, install or activate a plugin release. The Git-backed package identity is `agent-skills-manager:manage`; the private-collection legacy marker `managed_by: "skills-manager-public"` and `sources.json` v1 compatibility are retained. Upgrading the manager must not replace a user's private collection.
 
 ## Validation boundaries
 
