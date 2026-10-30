@@ -17,6 +17,22 @@ Operational reference for the public **Agent Skills Manager** and a **separate, 
 
 These rules apply to interactive and resumed operations, including requests repeated after an error.
 
+### Read-only preflight and operation boundaries
+
+A request to install authorizes **reading** the selected source and accessible destination so the manager can determine what, if anything, would change. Finish relevant tree/file inventories, referenced-file checks and local/source comparisons before returning a final decision. **Do not ask "May I inspect/compare/prepare an update plan?"** when only read operations are needed. A host-enforced read permission prompt, inaccessible files, or a genuine missing choice is a separate constraint: report the blocker instead of claiming the check was complete.
+
+**Install is not update.** Classify each requested destination before planning any mutation:
+
+1. **Absent:** eligible to add after security checks and a concrete approved write plan.
+2. **Existing, content-equivalent:** `Already installed / No changes`; leave the directory, metadata and pin untouched. If the origin is not verifiable, say `Untracked`, not `up to date` or `confirmed same source`.
+3. **Existing, locally differing:** `Locally modified — preserved` or `Different existing content — preserved` when its origin is unknown; **do not label this a write conflict** if no replacement is proposed. Do not create a forced update plan or request approval just to finish the comparison. Explain what differs and offer an explicitly requested update/reconciliation as a separate operation.
+4. **Existing, verified other-source identity:** `Name collision — blocked`; never adopt, overwrite or alias it without a separately approved change.
+5. **Incomplete comparison:** `Not verified` with the missing evidence; never report `No changes` based only on the main `SKILL.md` or a matching folder name.
+
+Compare all relevant regular files and required dependencies for the selected scope, including presence/absence and links. For UTF-8 text, report byte differences caused **only** by CRLF/LF separately from substantive differences, without changing files; do not silently ignore encoding changes, invalid bytes, mode changes or extra/missing files. Never normalize a user's files on disk to achieve equivalence. If every requested skill already exists and no changes were explicitly requested, finish with a concise inventory: unchanged, locally modified/preserved, blocked or unverified; **zero writes and no approval prompt**. Tracking an untracked skill or changing its source pin is itself a write and requires a separate reviewed plan.
+
+A mixed install batch may propose additions while preserving pre-existing locally modified skills. Clearly show omitted existing items and why. A genuine source collision or unsafe unreviewed dependency blocks the affected write; do not silently install a subset or transform the request into an update.
+
 ## 2. Data, identity and reconciliation
 
 The persisted format remains **`sources.json` schema_version 1**. Maintain existing keys, unknown fields and their values unless the user explicitly approves a compatible migration. Keep the exact legacy marker `"skills-manager-public"`; do not replace it with the public package's newer name.
@@ -67,8 +83,8 @@ Official CLI contracts: https://cli.github.com/manual/gh_skill_install , https:/
 | --- | --- | --- |
 | `list` / “Покажи установленные” | All actual managed `skills/*/SKILL.md`, reconciled with `sources.json` | Read-only inventory, provenance, anomalies; never equate this with all skills installed across ChatGPT |
 | `status` / “Покажи состояние коллекции” | Managed entries, with optional upstream verification | Read-only scoped freshness and local-drift report; never create a release |
-| `install selected` / “Установи только выбранные” | Explicitly named skills/paths within identified source/ref | Add only selected candidates, or `No changes` for identical installed content; collisions block |
-| `install all` / “Установи все skills” | **All discovered skills within the explicitly selected repository/tree/ref scope** | Stage one full selection, inspect each selected dependency closure, then one batch plan and approval; never include other tracked repositories by default |
+| `install selected` / “Установи только выбранные” | Explicitly named skills/paths within identified source/ref | Add absent skills after approval; equivalent existing skills are `No changes`, locally different skills are preserved, verified different-source collisions block; do not update existing skills |
+| `install all` / “Установи все skills” | **All discovered skills within the explicitly selected repository/tree/ref scope** | Reconcile every selected skill read-only, preserve existing items, and produce one batch plan/approval **only if additions are actually required**; never include other tracked repositories by default |
 | `update selected` | Explicit installed skills | Compare pinned/current scope; update changed, conflict-free entries only after approval |
 | `update outdated` / “Обнови устаревшие” | All installed managed skills with verified `Update available` in this collection | One proposed batch of verified updates, explicit exceptions for unchanged/unavailable/conflicting skills, one approval; do not silently discard blocked requested items |
 | `remove selected` / “Удали несколько skills” | Explicit installed destination names, disambiguated by source if needed | Remove owned files and records after dependency/reference checks, or `No changes` for already absent skills if no ambiguity |
@@ -89,7 +105,7 @@ Report `Locally modified` as a **separate local-state dimension** (or an explici
 
 ## 4. Read-only discovery and preflight
 
-Do only the work necessary for the request. Inventory reads need not download every upstream blob; a status check must compare the needed scoped content; an exact write plan needs the complete affected source/dependency closure. **Do not package archives, publish releases, or perform speculative conversion work before approval.** File reads needed for security validation and an accurate plan are allowed.
+Do only the work necessary for the request. Inventory reads need not download every upstream blob; a status check must compare the needed scoped content; an exact write plan needs the complete affected source/dependency closure. **Do not package archives, publish releases, or perform speculative conversion work before approval.** File reads needed for security validation and an accurate plan are allowed **without additional confirmation**; if the host itself requires read permissions, follow that permission boundary. A no-change result does not require a write plan or approval.
 
 1. **Resolve collection and permissions.** Check that Plugin Creator is actually available. For reads, use `list_owned_personal_plugins` (when supported), `get_plugin_files` with pagination and exact file paths, or an equivalent verified owned-plugin read. Require a private USER collection for writes. If read/write access is missing, report `Unavailable` and do not treat inaccessible as empty.
 2. **Resolve sources.** Parse GitHub repository, tree/directory URL or explicit ref into canonical repository, ref, path and full commit SHA. Verify both old pinned commit and proposed target commit are available when updating. Never use an unverified default branch as a substitute for a requested ref.
