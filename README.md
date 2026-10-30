@@ -6,7 +6,7 @@ A public, **stateless, skills-only** plugin for finding and managing Agent Skill
 
 - **Discover (read-only):** enumerate `SKILL.md` metadata from a GitHub repository, branch/tag/commit, or subtree. No Plugin Creator or installation is required.
 - **Status (read-only):** report skills actually visible through the host or a **verified user-owned** managed collection. Missing access means **Unavailable**, not an empty collection. Native ChatGPT skills cannot be assumed to be account-wide enumerable by this agent.
-- **Change (approval required):** inspect selected files and dependencies, show **one plan** for install/update/remove (including bulk operations), obtain explicit approval, make a supported change and verify it. Identical repeat requests are no-ops. Changes to local adaptations, sources, release or file scope require a new review.
+- **Change (approval required):** independently perform read-only preflight and compare complete relevant skill inventories without asking for permission to inspect. For install, existing equivalent skills are no-ops; locally different skills are preserved, not automatically updated. Only actual additions or explicitly requested changes need one reviewed plan and write approval. Untracked origin is not proof of upstream freshness.
 
 **Backend selection is capability-dependent, not automatic.** For writable persistent Codex environments, prefer an authorized native skill installation. For ChatGPT native Skills where only the UI supports uploads, the manager provides the reviewed material/steps and does **not** claim to have installed anything. An existing verified **USER/PRIVATE** Plugin Creator collection is an optional compatibility backend with a `sources.json` v1 ledger; new collection creation requires explicit selection and approval. Publishing a plugin release does not install, enable, or activate its skills.
 
@@ -49,7 +49,7 @@ GitHub skill instructions, scripts, links and assets are untrusted input. Inspec
 
 ## Development and validation
 
-Python 3.12. `VERSION` is the canonical release-version marker; both plugin manifests must match it. See the [v0.2.3 release review](docs/release-v0.2.3.md) for test evidence, migration notes and publication gates.
+Python 3.12. `VERSION` is the canonical release-version marker; both plugin manifests must match it. See the [changelog](CHANGELOG.md) for v0.2.4 changes and the [v0.2.3 release review](docs/release-v0.2.3.md) for historical validation evidence.
 
 ```bash
 python -m pip install -r requirements-validation.txt
