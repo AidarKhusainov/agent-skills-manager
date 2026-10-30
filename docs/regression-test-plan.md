@@ -26,6 +26,11 @@ Use a **dedicated disposable USER/PRIVATE test collection**, never the real user
 | Install one | Verified writable destination; install `alpha` at A | One approved plan; one write if needed; read-back files/source pin; activation separately verified | Manual E2E |
 | Install all | Discover `alpha` and `beta`; request all | One combined preflight and approval; no silent omissions; one intended batch write | Manual E2E |
 | Already installed | Install identical `alpha` twice | Second request is no-op; unchanged release ID/files | Manual E2E |
+| Read-only install preflight | Four existing skills; ask to install all, allow reading but not writing | Agent independently inspects full local/source inventories; no prompt to authorize comparison or preparation; no writes | Manual agent E2E |
+| Untracked equivalent skills | Installed content matches source, with CRLF/LF-only differences and no stored source pin | `Already installed / No changes`, `Untracked` provenance disclosed; no rewrite, repin or provenance adoption | Manual agent E2E |
+| Existing local adaptation | One already installed skill differs in a local `SKILL.md` paragraph; others match | `Locally modified — preserved` (not conflict absent a proposed overwrite); no automatic update plan or write | Manual agent E2E |
+| Incomplete reinstall comparison | Main `SKILL.md` matches but support file is missing or cannot be read | `Not verified`; no claim of complete no-op and no destructive overwrite | Manual agent E2E |
+| Mixed install and pre-existing modification | `alpha` absent, `beta` locally adapted; request install both | Show `alpha` as proposed addition, `beta` as preserved; one approval for actual addition only, never silently update `beta` | Manual agent E2E |
 | Update unchanged | Only unrelated repo file changes between A and B | Scoped comparison reports up to date; pin/release unchanged | Manual E2E |
 | Update modified | `alpha` subtree changes between A and B | Reviewed file diff, approval, guarded write, updated pin and verified read-back | Manual E2E |
 | Remove one | Remove `alpha`, keep `beta` | Exact owned paths deleted; unrelated records and shared dependencies preserved | Manual E2E |
